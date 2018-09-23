@@ -1,6 +1,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Button, TextInput, Text } from 'react-native';
 import { login } from '../helpers/auth';
+import firebase from '../config/constants';
 
 
 export default class LoginScreen extends React.Component {
@@ -8,6 +9,7 @@ export default class LoginScreen extends React.Component {
     super(props);
     this.handleLogin = this.handleLogin.bind(this);
     this.state = {
+      currentUser: {},
       message: '',
       email: 'cano@unitec.edu',
       password: 'password',
@@ -21,16 +23,25 @@ export default class LoginScreen extends React.Component {
   handleLogin() {
     login(this.state.email, this.state.password).then((response) => {
       if (response.user) {
-        console.log(response.user);
         this.setState({ message: 'Logged in succesfully!' });
       }
     }).catch((error) => {
       this.setState({ message: error.message });
     });
-    this.setState({
-      email: '',
-      password: ''
-    });
+
+    var user = firebase.auth().currentUser;
+    if (user) {
+      this.setState({
+        currentUser: {
+          uid: user.uid,
+          email: user.email,
+          profile_picture: user.photoURL,
+          username: user.displayName ? user.displayName : user.email
+        },
+        email: '',
+        password: ''
+      });
+    }
   }
 
   render() {
@@ -53,14 +64,40 @@ export default class LoginScreen extends React.Component {
           color="#841584"
         />
         <Text>{this.state.message}</Text>
+        <Text>
+          Currently logged in as: {this.state.currentUser.uid ? this.state.currentUser.uid : 'No one'}
+        </Text>
       </ScrollView>
     );
   }
 
-  componentDidMount() {
-    console.log('Mounted login');
+  setUser(user) {
+    // if user not in db: add him
+    firebase.database().ref('/users/' + user.uid).on('value', (snap) => {
+      if (!snap.val()) {
+        firebase.database().ref('/users/' + user.uid).set({
+          email: user.email,
+          profile_picture: user.photoURL ? use.photoURL : 'https://my.mixtape.moe/xspklg.jpg',
+          username: user.displayName
+        });
+      }
+    });
+
+    // add user info to state
+    this.setState({ currentUser: {
+      uid: user.uid,
+      email: user.email,
+      profile_picture: user.photoURL,
+      username: user.displayName
+    } });
   }
 
+  componentDidMount() {
+    var user = firebase.auth().currentUser;
+    if (user) {
+      this.setUser(user);
+    }
+  }
 }
 
 const styles = StyleSheet.create({

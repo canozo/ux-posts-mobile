@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-// import axios from 'axios';
+import axios from 'axios';
 import firebase from '../config/constants';
 import PostCard from '../components/PostCard';
 
@@ -11,7 +11,6 @@ export default class HomeScreen extends React.Component {
       currentUser: {},
       posts: {},
       users: {},
-      logged: 'false'
     };
   }
 
@@ -34,14 +33,6 @@ export default class HomeScreen extends React.Component {
   }
 
   render() {
-    return (
-      <ScrollView style={styles.container}>
-        <Text>{this.state.logged}</Text>
-      </ScrollView>
-    );
-  }
-
-  render() {
     var result = [];
     if (this.state.posts) {
       for (let key in this.state.posts) {
@@ -60,11 +51,11 @@ export default class HomeScreen extends React.Component {
         );
       }
       return (
-        <View>{this.sortByDate(result)}</View>
+        <ScrollView>{this.sortByDate(result)}</ScrollView>
       );
     } else {
       return (
-        <Text>There's nothing here yet!</Text>
+        <Text>There's nothing here yet!!</Text>
       );
     }
   }
@@ -82,31 +73,24 @@ export default class HomeScreen extends React.Component {
     });
 
     // add user info to state
-    this.setState({ currentUser: {
-      uid: user.uid,
-      email: user.email,
-      profile_picture: user.photoURL,
-      username: user.displayName
-    } });
-  }
-
-  componentDidUpdate() {
-    console.log('componentDidUpdate home');
-  }
-
-  componentWillReceiveProps() {
-    console.log('componentWillReceiveProps home')
+    this.setState({
+      currentUser: {
+        uid: user.uid,
+        email: user.email,
+        profile_picture: user.photoURL,
+        username: user.displayName ? user.displayName : user.email
+      }
+    });
   }
 
   componentDidMount() {
-    console.log('componentDidMount home');
     let apiUrl;
     var user = firebase.auth().currentUser;
     if (user) {
       this.setUser(user);
     }
 
-    apiUrl = `${'https://cors-anywhere.herokuapp.com/'}https://us-central1-examen-2-jc.cloudfunctions.net/getPosts?privacy=public`;
+    apiUrl = `https://us-central1-examen-2-jc.cloudfunctions.net/getPosts?privacy=public`;
 
     // posts
     this.dbRefPosts = firebase.database().ref('/posts');
