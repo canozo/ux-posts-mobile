@@ -77,7 +77,7 @@ export default class HomeScreen extends React.Component {
       currentUser: {
         uid: user.uid,
         email: user.email,
-        profile_picture: user.photoURL,
+        profile_picture: user.profile_picture,
         username: user.displayName ? user.displayName : user.email
       }
     });

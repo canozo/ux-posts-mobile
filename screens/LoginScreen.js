@@ -87,7 +87,7 @@ export default class LoginScreen extends React.Component {
     this.setState({ currentUser: {
       uid: user.uid,
       email: user.email,
-      profile_picture: user.photoURL,
+      profile_picture: user.profile_picture ? user.profile_picture : 'https://my.mixtape.moe/xspklg.jpg',
       username: user.displayName
     } });
   }
