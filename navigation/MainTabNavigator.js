@@ -7,7 +7,8 @@ import HomeScreen from '../screens/HomeScreen';
 import FollowedScreen from '../screens/FollowedScreen';
 import PrivateScreen from '../screens/PrivateScreen';
 import NewPostScreen from '../screens/NewPostScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import LoginScreen from '../screens/LoginScreen';
+import RegisterScreen from '../screens/RegisterScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -69,12 +70,12 @@ NewPostStack.navigationOptions = {
   ),
 };
 
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
+const LoginStack = createStackNavigator({
+  Logins: LoginScreen,
 });
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+LoginStack.navigationOptions = {
+  tabBarLabel: 'Login',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -83,10 +84,25 @@ SettingsStack.navigationOptions = {
   ),
 };
 
+const RegisterStack = createStackNavigator({
+  Registers: RegisterScreen,
+});
+
+RegisterStack.navigationOptions = {
+  tabBarLabel: 'Register',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-document'}
+    />
+  ),
+};
+
 export default createBottomTabNavigator({
+  LoginStack,
+  RegisterStack,
   HomeStack,
   FollowedStack,
   PrivateStack,
   NewPostStack,
-  SettingsStack,
 });
