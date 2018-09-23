@@ -1,9 +1,9 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 
-export default class SettingsScreen extends React.Component {
+export default class NewPostScreen extends React.Component {
   static navigationOptions = {
-    title: 'Settings',
+    title: 'Make a new post',
   };
 
   render() {

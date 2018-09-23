@@ -4,7 +4,9 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import FollowedScreen from '../screens/FollowedScreen';
+import PrivateScreen from '../screens/PrivateScreen';
+import NewPostScreen from '../screens/NewPostScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const HomeStack = createStackNavigator({
@@ -25,16 +27,44 @@ HomeStack.navigationOptions = {
   ),
 };
 
-const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+const FollowedStack = createStackNavigator({
+  Followed: FollowedScreen,
 });
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+FollowedStack.navigationOptions = {
+  tabBarLabel: 'Followed',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-link'}
+    />
+  ),
+};
+
+const PrivateStack = createStackNavigator({
+  Followed: PrivateScreen,
+});
+
+PrivateStack.navigationOptions = {
+  tabBarLabel: 'Private',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-star'}
+    />
+  ),
+};
+
+const NewPostStack = createStackNavigator({
+  NewPost: NewPostScreen,
+});
+
+NewPostStack.navigationOptions = {
+  tabBarLabel: 'New post',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-clipboard'}
     />
   ),
 };
@@ -48,13 +78,15 @@ SettingsStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options'}
+      name={Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-checkbox'}
     />
   ),
 };
 
 export default createBottomTabNavigator({
   HomeStack,
-  LinksStack,
+  FollowedStack,
+  PrivateStack,
+  NewPostStack,
   SettingsStack,
 });
